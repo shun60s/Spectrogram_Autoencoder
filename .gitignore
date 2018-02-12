@@ -1,0 +1,8 @@
+.DataSet/
+.logs/
+.wav/
+.spectrogram/
+.bak/
+*.bat
+
+
