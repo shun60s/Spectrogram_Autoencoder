@@ -9,7 +9,8 @@ and move wav files to wav directory. Steffi were removed due to it may soemthing
 ```
 python make_spectrogram.py
 ```
-spectrogram.zip is an example of output spectrogram directory. 
+spectrogram.zip is an example of output spectrogram directory.  
+
 ![sample](https://user-images.githubusercontent.com/36104188/36091873-a86aed28-1028-11e8-8e60-0b8a2853c15e.png)
 
 2.making two DataSet for deep learning framework chainer
