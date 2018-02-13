@@ -9,32 +9,33 @@ and move wav files to wav directory. Steffi were removed due to it may soemthing
 ```
 python make_spectrogram.py
 ```
-FFT size, shift size, mel bands number, max-min frequecny are adjustable at class GetSpecgram __init__  
-spectrogram.zip is an example of output spectrogram directory.  
+Mel scale of FFT size, shift size, bands number, max-min frequecny are adjustable at class GetSpecgram __init__  
 Some input wav file of slow utterance (xxx40 <=) or fast utterance (xxx260 >=)  were rejected  
-
+spectrogram.zip is an example of output spectrogram directory.  
 ![sample](https://user-images.githubusercontent.com/36104188/36091873-a86aed28-1028-11e8-8e60-0b8a2853c15e.png)
 
 
 2.making DataSet  
 
-each data and label   
+each data and label for classifier and autoencoder   
 ```
 python make_dataset.py
 ```
+  
 
 3.classifier by deep learning framework Chainer
 
-2 layers model  
+ two cnn layers model  
 ```
 python cnn_classifier1-2cnn.py
 ```
 ![sample](https://user-images.githubusercontent.com/36104188/36150172-24283bb8-1106-11e8-9bb4-8cccb62466b7.png)
 
-3 layers model  
+ three cnn layers model  
 ```
 python cnn_classifier1-3cnn.py
 ```
+
 
 4. CNN-Autoencoder  
 Customized extensions of Updater, Evaluator, and plot_figure are used.  
