@@ -8,9 +8,9 @@ from skimage.transform import resize
 
 # Check version
 #  Python 2.7.12 on win32 (Windows version)
-#  numpy 1.14.0 
+#  numpy (1.14.0)
 #  scikit-image (0.13.1)
-#  chainer (1.20.0.1)
+
 
 
 IN_DIR = 'spectrogram'
@@ -25,7 +25,6 @@ train_label = []
 
 
 # name => (number)
-# dict object
 number_dics = {}
 
 with open('labels.txt') as fp:
@@ -64,23 +63,14 @@ for f in files:
 print ('count ', count)
 
 
+# each data and label
+np.save(os.path.join(OUT_DIR,'train_data.npy'), train_data)
+np.save(os.path.join(OUT_DIR,'train_label.npy'), train_label)
 
-from chainer.datasets import tuple_dataset
+#only data: train and test divided
+#threshold = np.int32(train_data.shape[0]/10*9)
+#train1 = train_data[0:threshold]
+#test1  = train_data[threshold:]
+#np.save(os.path.join(OUT_DIR,'train_data_only.npy'), train1)
+#np.save(os.path.join(OUT_DIR,'test_data_only.npy'), test1)
 
-# train is 90% and test is 10% of whole
-threshold = np.int32(count/10*9)
-
-#only data
-train1 = train_data[0:threshold]
-test1  = train_data[threshold:]
-
-#with label
-train2 = tuple_dataset.TupleDataset(train_data[0:threshold], train_label[0:threshold])
-test2  = tuple_dataset.TupleDataset(train_data[threshold:],  train_label[threshold:])
-
-
-np.save(os.path.join(OUT_DIR,'train_data_only.npy'), train1)
-np.save(os.path.join(OUT_DIR,'test_data_only.npy'), test1)
-
-np.save(os.path.join(OUT_DIR,'train_with_label.npy'), train2)
-np.save(os.path.join(OUT_DIR,'test_with_label.npy'), test2)
