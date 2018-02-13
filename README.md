@@ -37,8 +37,8 @@ python cnn_classifier1-3cnn.py
 ```
 
 
-4. CNN-Autoencoder  
-Customized extensions of Updater, Evaluator, and plot_figure are used.  
+4. CNN-Autoencoder by deep learning framework Chainer  
+Customized chainer extensions of Updater, Evaluator, and plot_figure are used.  
 input->encoder-> decoder ->output   
 ```
 python cnn_autoencoder1.py
