@@ -6,6 +6,7 @@
 ./log_Autoencoder1
 ./log_Autoencoder2
 ./log_Autoencoder3
+./docs
 *.bat
 
 
