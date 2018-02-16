@@ -78,7 +78,7 @@ load autoencoder trained result, set as initial Weight and bias of CNN, and star
 python cnn_classifier2-3cnn.py
 ```
 ![Comparison](docs/loss-accuracy_comparisonpng_pre-train.png)
-Pre-train method rises up faster, but, final performance may depends on layers structure.  
+Pre-train method rises up faster, but, final performance may depends on layers structure.   
 
 
 ## License
