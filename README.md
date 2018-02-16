@@ -1,5 +1,6 @@
 # spectrum
-A practice of making mel spectrogram, CNN autoencode pre-training, and classifier by deep learning
+A practice of making mel spectrogram, CNN autoencode pre-training, and classifier by deep learning Chainer  
+
 [github repository](https://github.com/shun60s/spectrum)
 
 ## Usage
@@ -14,12 +15,12 @@ python make_spectrogram.py
 Mel scale of FFT size, shift size, bands number, max frequency and min frequecny are adjustable as class GetSpecgram init  
 Some input wav file of slow utterance (xxx40 <=) or fast utterance (xxx260 >=)  were rejected  
 spectrogram.zip is an example of output spectrogram directory.  
-![sample](https://user-images.githubusercontent.com/36104188/36091873-a86aed28-1028-11e8-8e60-0b8a2853c15e.png)
+![sample](docs/mel-spectrogram-samples-of-number_0.png)
 
 
-2.making DataSet  
+2.making DataSet
 
-each data and label for classifier and autoencoder   
+Data set of 2D gray scale image and its label for classifier and autoencoder   
 ```
 python make_dataset.py
 ```
@@ -27,25 +28,28 @@ python make_dataset.py
 
 3.classifier by deep learning framework Chainer
 
- two cnn layers model  
+ 2 CNN layers + FC  model  
 ```
 python cnn_classifier1-2cnn.py
 ```
-![sample](https://user-images.githubusercontent.com/36104188/36150172-24283bb8-1106-11e8-9bb4-8cccb62466b7.png)
 
- three cnn layers model  
+ 3 CNN cnn layers + FC  model  
 ```
 python cnn_classifier1-3cnn.py
 ```
 
+![sample](docs/loss-accuracy_comparisonpng.png.png)  
+ 2 CNN layers + FC is better performance than 3 CNN layers.  
 
-4.CNN-Autoencoder by deep learning framework Chainer  
+
+4.CNN-Autoencoder by deep learning framework Chainer
+
 Customized chainer extensions of Updater, Evaluator, and plot_figure are used.  
 input->encoder->decoder->output   
 ```
 python cnn_autoencoder1.py
 ```
-![sample](https://user-images.githubusercontent.com/36104188/36150167-20d228f2-1106-11e8-9d68-f0a2b217f112.png)
+![sample](inout-comparison_autoencoder1-epoch10.png.png)
 
 
 input>encoder(fixed)->encoder->decoder>decoder(fxied)->output  
@@ -53,24 +57,40 @@ input>encoder(fixed)->encoder->decoder>decoder(fxied)->output
 ```
 python cnn_autoencoder2.py
 ```
+![sample](inout-comparison_autoencoder2-epoch10.png.png)
 
-input>encoder(fixed)->encoder(fixed)>encoder->decoder-decoder(fixed)->decoder(fixed)>output  
+
+input>encoder(fixed)->encoder(fixed)>encoder->decoder->decoder(fixed)->decoder(fixed)>output  
 3rd layer of autoencoder training  
 ```
 python cnn_autoencoder3.py
 ```
+![sample](inout-comparison_autoencoder3-epoch10.png.png)
 
-5.classifier with 3 layers autoencoder pre-training as initial Weight and bias of CNN  
-load autoencoder trained result and start training of classifier  
+
+5.classifier with pre-train
+
+load autoencoder trained result, set as initial Weight and bias of CNN, and start training of classifier  
 ```
-python cnn_classifier1-3cnn.py
+python cnn_classifier2-3cnn.py
 ```
-![Comparison]()
-In this simple model, pre-tarin classifier has no significant difference.  
+![Comparison](loss-accuracy_comparisonpng_pre-train.png)
+With pre-train method rises up faster, but, final performance may depends on layers structure.  
 
 
 ## License
- Regarding to melbank.py, follow the license wrtten in the content.
+ Regarding to melbank.py, follow the license wrtten in the contents.
+
+
+## References
+
+- [wav of Pannous, Description](https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md)
+- [chainer dataset](https://qiita.com/tommyfms2/items/c3fa0cb258c17468cb30)
+- [chainer deep autoencoder](https://qiita.com/nyk510/items/bb49e1ab8770f6bfb7d1)
+- [chainer extension Evaluator](http://mizti.hatenablog.com/entry/2017/10/24/011003)
+- [chainer extension DelGradient](http://mizti.hatenablog.com/entry/2017/10/24/011003)
+- [chainer extension GANUpate](https://qiita.com/crcrpar/items/ea05aadeb15aff817546)
+
 
 ## Disclaimer
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
@@ -79,3 +99,4 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
 THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
