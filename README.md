@@ -38,7 +38,7 @@ python cnn_classifier1-2cnn.py
 python cnn_classifier1-3cnn.py
 ```
 
-![sample](docs/loss-accuracy_comparisonpng.png.png)  
+![sample](docs/loss-accuracy_comparisonpng.png)  
  2 CNN layers + FC is better performance than 3 CNN layers.  
 
 
@@ -49,7 +49,7 @@ input->encoder->decoder->output
 ```
 python cnn_autoencoder1.py
 ```
-![sample](inout-comparison_autoencoder1-epoch10.png.png)
+![sample](inout-comparison_autoencoder1-epoch10.png)
 
 
 input>encoder(fixed)->encoder->decoder>decoder(fxied)->output  
@@ -57,7 +57,7 @@ input>encoder(fixed)->encoder->decoder>decoder(fxied)->output
 ```
 python cnn_autoencoder2.py
 ```
-![sample](inout-comparison_autoencoder2-epoch10.png.png)
+![sample](inout-comparison_autoencoder2-epoch10.png)
 
 
 input>encoder(fixed)->encoder(fixed)>encoder->decoder->decoder(fixed)->decoder(fixed)>output  
@@ -65,7 +65,7 @@ input>encoder(fixed)->encoder(fixed)>encoder->decoder->decoder(fixed)->decoder(f
 ```
 python cnn_autoencoder3.py
 ```
-![sample](inout-comparison_autoencoder3-epoch10.png.png)
+![sample](inout-comparison_autoencoder3-epoch10.png)
 
 
 5.classifier with pre-train
@@ -74,7 +74,7 @@ load autoencoder trained result, set as initial Weight and bias of CNN, and star
 ```
 python cnn_classifier2-3cnn.py
 ```
-![Comparison](loss-accuracy_comparisonpng_pre-train.png)
+![Comparison](loss-accuracy_comparison_pre-train.png)
 With pre-train method rises up faster, but, final performance may depends on layers structure.  
 
 
@@ -88,7 +88,7 @@ With pre-train method rises up faster, but, final performance may depends on lay
 - [chainer dataset](https://qiita.com/tommyfms2/items/c3fa0cb258c17468cb30)
 - [chainer deep autoencoder](https://qiita.com/nyk510/items/bb49e1ab8770f6bfb7d1)
 - [chainer extension Evaluator](http://mizti.hatenablog.com/entry/2017/10/24/011003)
-- [chainer extension DelGradient](http://mizti.hatenablog.com/entry/2017/10/24/011003)
+- [chainer extension DelGradient](https://qiita.com/ysasaki6023/items/3040fe3896fe1ed844c3)
 - [chainer extension GANUpate](https://qiita.com/crcrpar/items/ea05aadeb15aff817546)
 
 
