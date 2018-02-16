@@ -7,7 +7,7 @@ A practice of making mel spectrogram, CNN autoencode pre-training, and classifie
 [github repository](https://github.com/shun60s/spectrum)
 
 ## Usage
-###1.making mel spectrogram
+### 1.making mel spectrogram
 
 Download the english number 0-9 speech data,  <http://pannous.net/files/spoken_numbers_wav.tar>  
 (See Description of Data in <https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md> )  
@@ -21,7 +21,7 @@ spectrogram.zip is an example of output spectrogram directory.
 ![sample](docs/mel-spectrogram-samples-of-number_0.png)
 
 
-###2.making DataSet
+### 2.making DataSet
 
 Data set of 2D gray scale image and its label for classifier and autoencoder   
 ```
@@ -29,7 +29,7 @@ python make_dataset.py
 ```
   
 
-###3.classifier by deep learning framework Chainer
+### 3.classifier by deep learning framework Chainer
 
  2 CNN layers + FC  model  
 ```
@@ -45,7 +45,7 @@ python cnn_classifier1-3cnn.py
  2 CNN layers + FC is better performance than 3 CNN layers.  
 
 
-###4.CNN-Autoencoder by deep learning framework Chainer
+### 4.CNN-Autoencoder by deep learning framework Chainer
 
 Customized chainer extensions of Updater, Evaluator, and plot_figure are used.  
 input->encoder->decoder->output   
@@ -71,7 +71,7 @@ python cnn_autoencoder3.py
 ![sample](docs/inout-comparison_autoencoder3-epoch10.png)
 
 
-###5.classifier with pre-train
+### 5.classifier with pre-train
 
 load autoencoder trained result, set as initial Weight and bias of CNN, and start training of classifier  
 ```
