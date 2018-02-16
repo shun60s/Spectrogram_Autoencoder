@@ -22,20 +22,55 @@ import copy
 #  chainer (1.20.0.1)
 
 
-class CNN_Autoencoder1(Chain):
-	def __init__(self,num_filter, size_filter, stride0=1):
-		super(CNN_Autoencoder1, self).__init__(
-			conv1 = L.Convolution2D(1, num_filter, size_filter, stride=stride0),
-			dcnv1 = L.Deconvolution2D(num_filter, 1, size_filter, stride=stride0)
+class CNN_Autoencoder3(Chain):
+	def __init__(self,num_filter, size_filter, stride0=1, net=None):
+		super(CNN_Autoencoder3, self).__init__(
+			conv1 = L.Convolution2D(1, num_filter, size_filter, stride=stride0,
+			                        initialW=net.conv1_W if net else None ,initial_bias=net.conv1_b if net else None),
+			conv2 = L.Convolution2D(num_filter, num_filter * 2, size_filter, stride=stride0,
+			                        initialW=net.conv2_W if net else None ,initial_bias=net.conv2_b if net else None),
+			conv3 = L.Convolution2D(num_filter * 2, num_filter * 2, size_filter, stride=stride0),
+			#dcnv3 = L.Deconvolution2D(num_filter * 2, num_filter * 2, size_filter, stride=stride0), # due to shape un-match error, need to adjust
+			dcnv3 = L.Deconvolution2D(num_filter * 2, num_filter * 2, (size_filter+1), stride=stride0),  # give up symmetry of filter size to match in/out shape
+			dcnv2 = L.Deconvolution2D(num_filter * 2, num_filter, size_filter, stride=stride0,
+			                        initialW=net.dconv2_W if net else None ,initial_bias=net.dconv2_b if net else None),
+			dcnv1 = L.Deconvolution2D(num_filter, 1, size_filter, stride=stride0,
+			                        initialW=net.dconv1_W if net else None ,initial_bias=net.dconv1_b if net else None),
 		)
 		self.train = True
 
 	def __call__(self, x):
-		h1 = F.relu(self.conv1(x))
-		h2 = F.relu(self.dcnv1(h1))
-		return h2
-
+		h4,h2=self.sub(x)
+		h5 = F.relu(self.dcnv2(h4))
+		h6 = F.relu(self.dcnv1(h5))
+		return h6
 		
+	def sub(self, x):
+		h1 = F.relu(self.conv1(x))
+		h2 = F.relu(self.conv2(h1))
+		#print ('h2.shape', h2.shape)
+		h3 = F.relu(self.conv3(h2))
+		#print ('h3.shape', h3.shape)
+		h4 = F.relu(self.dcnv3(h3))
+		#print ('h4.shape', h4.shape)
+		return h4,h2
+
+
+class DelGradient(object):
+	name = 'DelGradient'
+	def __init__(self, delTgt):
+		self.delTgt = delTgt
+
+	def __call__(self, opt):
+		for name,param in opt.target.namedparams():
+			for d in self.delTgt:
+				if d in name:
+					#print ('avoid ', d)
+					grad = param.grad
+					with cuda.get_device(grad):
+						grad*=0
+
+
 class Custom_Updater(training.StandardUpdater):
 	def __init__(self, iterator, generator, optimizers, converter=convert.concat_examples, device=None,):
 		if isinstance(iterator, iterator_module.Iterator):
@@ -55,9 +90,9 @@ class Custom_Updater(training.StandardUpdater):
 		batchsize = x_data.shape[0]
 		z= x_data
 
-		x_gen = self.gen(z)
+		y_gen, x_gen = self.gen.sub(z)
 
-		loss_gen =  F.mean_squared_error(x_gen, z)
+		loss_gen =  F.mean_squared_error(x_gen, y_gen)
 		loss = loss_gen / batchsize
 
 		for optimizer in self._optimizers.values():
@@ -88,18 +123,17 @@ class Custom_Evaluator(extensions.Evaluator):
 			with reporter_module.report_scope(observation):
 				in_arrays = self.converter(batch, self.device)
 				with function.no_backprop_mode():
-						z=eval_func(in_arrays)
-						loss_validation =  F.mean_squared_error(in_arrays, z) / in_arrays.shape[0]
+						y_z, x_z=eval_func.sub(in_arrays)
+						loss_validation =  F.mean_squared_error(y_z, x_z) / in_arrays.shape[0]
 
 			summary.add({'validation/loss':loss_validation })
 			summary.add(observation)
 
 
-
 		return summary.compute_mean()
 
 
-def plot_figure(test, OUT_DIR='autoencoder1'):
+def plot_figure(test, OUT_DIR='autoencoder3'):
 	@training.make_extension(trigger=(1, 'epoch'))
 	def _plot_figure(trainer):
 		number=5
@@ -131,37 +165,85 @@ def get_dataset(IN_DIR='DataSet', train_ratio=9):
 	return train, test
 
 
-def save_auto_wb(model, OUT_DIR='autoencoder1'):
+def save_auto_wb(model, OUT_DIR='autoencoder3'):
 	if not os.path.exists(OUT_DIR):
 		os.mkdir(OUT_DIR)
-	conv1_W = model.conv1.W.data
-	conv1_b = model.conv1.b.data
-	dconv1_W = model.dcnv1.W.data
-	dconv1_b = model.dcnv1.b.data
-	np.save(os.path.join(OUT_DIR,'conv1_W.npy'), conv1_W)
-	np.save(os.path.join(OUT_DIR,'conv1_b.npy'), conv1_b)
-	np.save(os.path.join(OUT_DIR,'dconv1_W.npy'), dconv1_W)
-	np.save(os.path.join(OUT_DIR,'dconv1_b.npy'), dconv1_b)
+	conv3_W = model.conv3.W.data
+	conv3_b = model.conv3.b.data
+	dconv3_W = model.dcnv3.W.data
+	dconv3_b = model.dcnv3.b.data
+	np.save(os.path.join(OUT_DIR,'conv3_W.npy'), conv3_W)
+	np.save(os.path.join(OUT_DIR,'conv3_b.npy'), conv3_b)
+	np.save(os.path.join(OUT_DIR,'dconv3_W.npy'), dconv3_W)
+	np.save(os.path.join(OUT_DIR,'dconv3_b.npy'), dconv3_b)
 	print ('saved conv W and b')
 
 
+class Class_net(object):
+	def __init__(self, default_Wb):
+		self.Wb = default_Wb
+	@property
+	def conv1_W(self):
+		return self.Wb[0]
+	@property
+	def conv1_b(self):
+		return self.Wb[1]
+	@property
+	def dconv1_W(self):
+		return self.Wb[2]
+	@property
+	def dconv1_b(self):
+		return self.Wb[3]
+	@property
+	def conv2_W(self):
+		return self.Wb[4]
+	@property
+	def conv2_b(self):
+		return self.Wb[5]
+	@property
+	def dconv2_W(self):
+		return self.Wb[6]
+	@property
+	def dconv2_b(self):
+		return self.Wb[7]
+
+
+def load_init_Wb(IN_DIR='log_Autoencoder'):
+	list0=['conv1_W','conv1_b','dconv1_W','dconv1_b','conv2_W','conv2_b','dconv2_W','dconv2_b']
+	for i, listx in enumerate(list0):
+		f=os.path.join(IN_DIR+ str(int(i/4)+1) ,(listx+'.npy'))
+		if os.path.exists(f):
+			list0[i] = np.load(f)
+			print (' load of ', f)
+		else:
+			list0[i] = None
+			print (' no file of ', f)
+	return Class_net(list0)
 
 
 if __name__=='__main__':
+	
+	# load upper layer W and b
+	net0=load_init_Wb()
 
-	model = CNN_Autoencoder1(num_filter=16, size_filter=6,stride0=2)
+	model = CNN_Autoencoder3(num_filter=16, size_filter=6,stride0=2, net=net0)
 
 	train, test = get_dataset()
 
 	optimizer = {'gen': chainer.optimizers.Adam()}
 	optimizer['gen'].setup(model)
+	
+	# To avoid weight update of specified layer
+	optimizer['gen'].add_hook(DelGradient(["conv1","dcnv1","conv2","dcnv2"]))
+	
+	
 	train_iter = chainer.iterators.SerialIterator(train, batch_size=30)
 	test_iter = chainer.iterators.SerialIterator(test, batch_size=30, repeat=False, shuffle=False)
 
 	updater = Custom_Updater(train_iter,  model, optimizer, device=-1)
 	
 	### output dir "logs"
-	OUT_DIR='log_Autoencoder1'
+	OUT_DIR='log_Autoencoder3'
 	if not os.path.exists(OUT_DIR):
 		os.mkdir(OUT_DIR)
 	
