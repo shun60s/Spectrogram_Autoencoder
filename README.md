@@ -92,7 +92,7 @@ Pre-train method rises up faster, but, final performance may depends on layers s
 - [chainer deep autoencoder](https://qiita.com/nyk510/items/bb49e1ab8770f6bfb7d1)
 - [chainer extension Evaluator](http://mizti.hatenablog.com/entry/2017/10/24/011003)
 - [chainer extension DelGradient](https://qiita.com/ysasaki6023/items/3040fe3896fe1ed844c3)
-- [chainer extension GANUpate](https://qiita.com/crcrpar/items/ea05aadeb15aff817546)
+- [chainer extension Updater](https://qiita.com/crcrpar/items/ea05aadeb15aff817546)
 
 
 ## Disclaimer
