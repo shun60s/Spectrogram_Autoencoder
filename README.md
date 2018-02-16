@@ -36,7 +36,7 @@ python make_dataset.py
 python cnn_classifier1-2cnn.py
 ```
 
- 3 CNN cnn layers + FC  model  
+ 3 CNN layers + FC  model  
 ```
 python cnn_classifier1-3cnn.py
 ```
