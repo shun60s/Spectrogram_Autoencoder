@@ -1,4 +1,4 @@
-# spectrum
+# mel spectrogram, autoencoder 
 
 ## Abstract
 
