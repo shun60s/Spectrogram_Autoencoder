@@ -1,18 +1,19 @@
-﻿<!DOCTYPE HTML>
-<!DOCTYPE html PUBLIC " -//W3C//DTD HTML 4.01 Frameset//EN">
-<HTML lang="en">
-<HEAD><META content="IE=11.0000" http-equiv="X-UA-Compatible">
+﻿<!DOCTYPE html>
+<HTML lang="ja">
+<HEAD>
      
 <META charset="UTF-8">     
-<META name="viewport" content="width=device-width, initial-scale=1"> <!-- Begin Jekyll SEO tag v2.3.0 --> 
+<META name="viewport" content="width=device-width, initial-scale=1"> 
+<!-- Begin Jekyll SEO tag v2.3.0 --> 
 <TITLE>A practice of making mel spectrogram, CNN autoencode 
 pre-training, and classifier by deep learning</TITLE> 
 <META name="description" content="A practice of making mel spectrogram, CNN autoencode pre-training, and classifier by deep learning"> 
 <META content="A practice of making mel spectrogram, CNN autoencode pre-training, and classifier by deep learning" 
-property="og:description"> <LINK href="https://shun60s.github.io/spectrum/" rel="canonical"> 
+property="og:description">
+<LINK href="https://shun60s.github.io/spectrum/" rel="canonical"> 
 <META content="https://shun60s.github.io/spectrum/" property="og:url"> 
 
-
+<link rel="alternate" hreflang="ja" href="https://shun60s.github.io/spectrum/">
 
 
  <LINK href="style.css" rel="stylesheet"> 
@@ -24,6 +25,7 @@ property="og:description"> <LINK href="https://shun60s.github.io/spectrum/" rel=
 <H2 id="abstract">Abstract</H2>
 <P>A practice of making mel spectrogram, CNN autoencode pre-training, and 
 classifier by deep learning Chainer</P>
+<p>メル尺度のスぺクトログラムの作成、オートエンコーダによる事前学習、などの学習練習用に作りました。</p>
 <P><A href="https://github.com/shun60s/spectrum">github repository</A></P>
 <H2 id="usage">Usage</H2>
 <H3 id="1making-mel-spectrogram">1.making mel spectrogram</H3>
@@ -94,6 +96,7 @@ start training of classifier</P>
 <P><IMG alt="Comparison" src="loss-accuracy_comparisonpng_pre-train.png"><BR>
 Pre-train method rises up faster, but, final performance may depends on layers 
 structure.</P>
+<p>識別性能は事前学習したものは立ち上がりが早いですが、最終的な性能はディープラーニングの層数（構成）に依存するようです。</p>
 <H2 id="license">License</H2>
 <P>Regarding to melbank.py, follow the license wrtten in the contents.</P>
 <H2 id="references">References</H2>
