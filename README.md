@@ -3,6 +3,7 @@
 ## Abstract
 
 A practice of making mel spectrogram, CNN autoencode pre-training, and classifier by deep learning Chainer  
+メル尺度のスぺクトログラムの作成、オートエンコーダによる事前学習、などの学習練習用に作りました。  
 
 [github repository](https://github.com/shun60s/spectrum)
 
@@ -79,6 +80,7 @@ python cnn_classifier2-3cnn.py
 ```
 ![Comparison](docs/loss-accuracy_comparisonpng_pre-train.png)  
 Pre-train method rises up faster, but, final performance may depends on layers structure.   
+識別性能は事前学習したものは立ち上がりが早いですが、最終的な性能はディープラーニングの層数（構成）に依存するようです。  
 
 
 ## License
