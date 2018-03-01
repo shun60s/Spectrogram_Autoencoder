@@ -1,124 +1,141 @@
-﻿<!DOCTYPE html>
-<HTML lang="ja">
-<HEAD>
-     
-<META charset="UTF-8">     
-<META name="viewport" content="width=device-width, initial-scale=1"> 
-<!-- Begin Jekyll SEO tag v2.3.0 --> 
-<TITLE>A practice of making mel spectrogram, CNN autoencode 
-pre-training, and classifier by deep learning</TITLE> 
-<META name="description" content="A practice of making mel spectrogram, CNN autoencode pre-training, and classifier by deep learning"> 
-<META content="A practice of making mel spectrogram, CNN autoencode pre-training, and classifier by deep learning" 
-property="og:description">
-<LINK href="https://shun60s.github.io/spectrum/" rel="canonical"> 
-<META content="https://shun60s.github.io/spectrum/" property="og:url"> 
-
-<link rel="alternate" hreflang="ja" href="https://shun60s.github.io/spectrum/">
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
- <LINK href="style.css" rel="stylesheet"> 
-  
-<META name="GENERATOR" content="MSHTML 11.00.10570.1001"></HEAD>   
-<BODY>
-<DIV class="container-lg px-3 my-5 markdown-body">
-<H1 id="spectrum">mel spectrogram, autoencoder</H1>
-<H2 id="abstract">Abstract</H2>
-<P>A practice of making mel spectrogram, CNN autoencode pre-training, and 
-classifier by deep learning Chainer</P>
-<p>メル尺度のスぺクトログラムの作成、オートエンコーダによる事前学習、などの学習練習用に作りました。</p>
-<P><A href="https://github.com/shun60s/spectrum">github repository</A></P>
-<H2 id="usage">Usage</H2>
-<H3 id="1making-mel-spectrogram">1.making mel spectrogram</H3>
-<P>Download the english number 0-9 speech data,  <A href="http://pannous.net/files/spoken_numbers_wav.tar">http://pannous.net/files/spoken_numbers_wav.tar</A><BR>
-(See Description of Data in <A href="https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md">https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md</A> 
-)<BR>and move wav files to wav directory. Steffi were removed due to it may 
-soemthing wrong.</P>
-<DIV class="highlighter-rouge">
-<DIV class="highlight">
-<PRE class="highlight"><CODE>python make_spectrogram.py
-</CODE></PRE></DIV></DIV>
-<P>Mel scale of FFT size, shift size, bands number, max frequency and min 
-frequecny are adjustable as class GetSpecgram init<BR>Some input wav file of 
-slow utterance (xxx40 &lt;=) or fast utterance (xxx260 &gt;=)  were rejected<BR>
-spectrogram.zip is an example of output spectrogram directory.<BR><IMG alt="sample" 
-src="mel-spectrogram-samples-of-number_0.png"></P>
-<H3 id="2making-dataset">2.making DataSet</H3>
-<P>Data set of 2D gray scale image and its label for classifier and 
-autoencoder</P>
-<DIV class="highlighter-rouge">
-<DIV class="highlight">
-<PRE class="highlight"><CODE>python make_dataset.py
-</CODE></PRE></DIV></DIV>
-<H3 id="3classifier-by-deep-learning-framework-chainer">3.classifier by deep 
-learning framework Chainer</H3>
-<P>2 CNN layers + FC  model</P>
-<DIV class="highlighter-rouge">
-<DIV class="highlight">
-<PRE class="highlight"><CODE>python cnn_classifier1-2cnn.py
-</CODE></PRE></DIV></DIV>
-<P>3 CNN layers + FC  model</P>
-<DIV class="highlighter-rouge">
-<DIV class="highlight">
-<PRE class="highlight"><CODE>python cnn_classifier1-3cnn.py
-</CODE></PRE></DIV></DIV>
-<P><IMG alt="sample" src="loss-accuracy_comparisonpng.png"><BR> 2 
-CNN layers + FC is better performance than 3 CNN layers.</P>
-<H3 id="4cnn-autoencoder-by-deep-learning-framework-chainer">4.CNN-Autoencoder 
-by deep learning framework Chainer</H3>
-<P>Customized chainer extensions of Updater, Evaluator, and plot_figure are 
-used.<BR>input-&gt;encoder-&gt;decoder-&gt;output</P>
-<DIV class="highlighter-rouge">
-<DIV class="highlight">
-<PRE class="highlight"><CODE>python cnn_autoencoder1.py
-</CODE></PRE></DIV></DIV>
-<P><IMG alt="sample" src="inout-comparison_autoencoder1-epoch10.png"></P>
-<P>input&gt;encoder(fixed)-&gt;encoder-&gt;decoder&gt;decoder(fxied)-&gt;output<BR>
-2nd layer of autoencoder training</P>
-<DIV class="highlighter-rouge">
-<DIV class="highlight">
-<PRE class="highlight"><CODE>python cnn_autoencoder2.py
-</CODE></PRE></DIV></DIV>
-<P><IMG alt="sample" src="inout-comparison_autoencoder2-epoch10.png"></P>
-<P>input&gt;encoder(fixed)-&gt;encoder(fixed)&gt;encoder-&gt;decoder-&gt;decoder(fixed)-&gt;decoder(fixed)&gt;output<BR>
-3rd layer of autoencoder training</P>
-<DIV class="highlighter-rouge">
-<DIV class="highlight">
-<PRE class="highlight"><CODE>python cnn_autoencoder3.py
-</CODE></PRE></DIV></DIV>
-<P><IMG alt="sample" src="inout-comparison_autoencoder3-epoch10.png"></P>
-<H3 id="5classifier-with-pre-train">5.classifier with pre-train</H3>
-<P>load autoencoder trained result, set as initial Weight and bias of CNN, and 
-start training of classifier</P>
-<DIV class="highlighter-rouge">
-<DIV class="highlight">
-<PRE class="highlight"><CODE>python cnn_classifier2-3cnn.py
-</CODE></PRE></DIV></DIV>
-<P><IMG alt="Comparison" src="loss-accuracy_comparisonpng_pre-train.png"><BR>
-Pre-train method rises up faster, but, final performance may depends on layers 
-structure.</P>
-<p>識別性能は事前学習したものは立ち上がりが早いですが、最終的な性能はディープラーニングの層数（構成）に依存するようです。</p>
-<H2 id="license">License</H2>
-<P>Regarding to melbank.py, follow the license wrtten in the contents.</P>
-<H2 id="references">References</H2>
-<UL>
-  <LI><A href="https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md">wav 
-  of Pannous, Description</A></LI>
-  <LI><A href="https://qiita.com/tommyfms2/items/c3fa0cb258c17468cb30">chainer 
-  dataset</A></LI>
-  <LI><A href="https://qiita.com/nyk510/items/bb49e1ab8770f6bfb7d1">chainer deep 
-  autoencoder</A></LI>
-  <LI><A href="http://mizti.hatenablog.com/entry/2017/10/24/011003">chainer 
-  extension Evaluator</A></LI>
-  <LI><A href="https://qiita.com/ysasaki6023/items/3040fe3896fe1ed844c3">chainer 
-  extension DelGradient</A></LI>
-  <LI><A href="https://qiita.com/crcrpar/items/ea05aadeb15aff817546">chainer 
-  extension Updater</A></LI></UL>
-<H2 id="disclaimer">Disclaimer</H2>
-<P>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-IMPLIED,  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-FITNESS  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL  THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-LIABILITY,  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
-SOFTWARE.</P></DIV>
-   </BODY></HTML>
+<title>スペクトログラム、オートエンコーダ</title>
+<meta property="og:title" content="スペクトログラム、オートエンコーダ" />
+<meta property="og:locale" content="ja_JP" />
+<meta name="description" content="メル尺度のスぺクトログラムの作成、オートエンコーダによる事前学習、練習用" />
+<meta property="og:description" content="メル尺度のスぺクトログラムの作成、オートエンコーダによる事前学習、練習用" />
+<link rel="canonical" href="https://shun60s.github.io/spectrum/" />
+<meta property="og:url" content="https://shun60s.github.io/spectrum/" />
+<meta property="og:site_name" content="スペクトログラム、オートエンコーダ" />
+
+
+    <link href="style.css" rel="stylesheet">
+    <link rel="alternate" hreflang="ja" href="https://shun60s.github.io/spectrum/" />
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+
+      <h1 id="hmm">スペクトログラム、オートエンコーダ</h1>
+
+<h2 id="概要">概要</h2>
+
+<p>メル尺度のスぺクトログラムの作成、オートエンコーダによる事前学習、などの練習用。<br />
+ディープラーニングのフレームワークは Chainerを使用。</p>
+
+<p><a href="https://github.com/shun60s/spectrum">github repository</a></p>
+
+<h2 id="使い方">使い方</h2>
+<h3 id="1メル尺度のスペクトログラムの作成">1.メル尺度のスペクトログラムの作成</h3>
+
+<p>数字の発話（英語）のWAVEファイルをダウンロードする。  <a href="http://pannous.net/files/spoken_numbers_wav.tar">http://pannous.net/files/spoken_numbers_wav.tar</a><br />
+(データの中身の情報 <a href="https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md">https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md</a> )<br />
+wavディレクトリーに移動する。ファイル名称の中にSteffi（名前）が含まれるデータは除いた。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python make_spectrogram.py
+</code></pre></div></div>
+<p>フィルターバンクの数や、使用する周波数の幅、フレーム分析長さ（FFTの次数、シフト値）なども可変設定できる。
+WAVファイルの発話の速さ（例：40未満または260以上 ）の条件で排除できる。
+spectrogramディレクトリーに出力される。<br />
+spectrogram.zipは出力された例。<br />
+<img src="mel-spectrogram-samples-of-number_0.png" alt="スペクトログラムの例" /></p>
+
+<h3 id="2データセットの作成">2.データセットの作成 </h3>
+
+<p>スペクトログラムから訓練用とテスト用のデータを準備する。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python make_dataset.py
+</code></pre></div></div>
+
+
+<p>DataSetディレクトリーに訓練用とテスト用のデータセットが出力される。</p>
+
+<h3 id="3事前学習なしで分類してみる">3.事前学習なしで分類してみる</h3>
+<p>2層 CNN(Convolutional Neural Network) + FC（full connection)  モデル の場合 </p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python cnn_classifier1-2cnn.py
+</code></pre></div></div>
+
+<p>3層 CNN(Convolutional Neural Network) + FC（full connection)  モデル の場合</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python cnn_classifier1-3cnn.py
+</code></pre></div></div>
+
+<p><img src="loss-accuracy_comparisonpng.png" alt="2層と3層の比較" /></p>
+
+<p>上図は2層と3層の損失(loss)と正解率(accuracy)の比較。3層より2層モデルの方がよい結果となった。</p>
+
+<h3 id="4CNNのオートエンコーダーによる事前学習">4.CNNのオートエンコーダーによる事前学習</h3>
+
+<p>１層目のオートエンコーダーを学習する<br />
+input->encoder->decoder->output</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python cnn_autoencoder1.py
+</code></pre></div></div>
+
+<p><img src="inout-comparison_autoencoder1-epoch10.png" alt="オートエンコーダ１層目" /></p>
+<p>上図は、オートエンコーダの入力とその出力の比較。</p>
+<br />
+<p>2層目の学習<br />
+前回で学習した値を使って、2層目を学習する<br />
+input>encoder(fixed)->encoder->decoder>decoder(fxied)->output</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python cnn_autoencoder2.py
+</code></pre></div></div>
+
+<p><img src="inout-comparison_autoencoder2-epoch10.png" alt="オートエンコーダ１層目" /></p>
+<p>上図は、オートエンコーダの入力とその出力の比較。</p>
+<br />
+<p>3層目の学習<br />
+前々回と前回で学習した値を使って、3層目を学習する。<br />
+input>encoder(fixed)->encoder(fixed)>encoder->decoder->decoder(fixed)->decoder(fixed)>output</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python cnn_autoencoder3.py
+</code></pre></div></div>
+
+<p><img src="inout-comparison_autoencoder3-epoch10.png" alt="オートエンコーダ１層目" /></p>
+<p>上図は、オートエンコーダの入力とその出力の比較。</p>
+
+
+<h3 id="5事前学習したものをつかった学習と分類">5.事前学習したものをつかった学習と分類</h3>
+<p>事前学習した値をCNNの初期値として、3層CNN + FC モデルを学習する。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python cnn_classifier2-3cnn.py
+</code></pre></div></div>
+
+<p><img src="loss-accuracy_comparisonpng_pre-train.png" alt="事前学習ありなしの比較" /></p>
+
+<p>分類性能は事前学習した方が立ち上がりが早いが、最終的な性能はディープラーニングの層数（構成）に依存するようです。</p>
+
+<h2 id="ライセンス">ライセンス</h2>
+<p>melbank.pyは　それに記載されているライセンスに従うこと。</p>
+
+<h2 id="参照したもの">参照したもの</h2>
+
+<ul>
+  <li><a href="https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md">wav of Pannous, Description</a></li>
+  <li><a href="https://qiita.com/tommyfms2/items/c3fa0cb258c17468cb30">chainer dataset</a></li>
+  <li><a href="https://qiita.com/nyk510/items/bb49e1ab8770f6bfb7d1">chainer deep autoencoder</a></li>
+  <li><a href="http://mizti.hatenablog.com/entry/2017/10/24/011003">chainer extension Evaluator</a></li>
+  <li><a href="https://qiita.com/ysasaki6023/items/3040fe3896fe1ed844c3">chainer extension DelGradient</a></li>
+  <li><a href="https://qiita.com/crcrpar/items/ea05aadeb15aff817546">chainer extension Updater</a></li>
+</ul>
+
+<h2 id="免責事項">免責事項　</h2>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS 
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<h4 id="上記はmitライセンスからの抜粋です">上記はMITライセンスからの抜粋です。</h4>
+
+
+
+      
+    </div>
+  </body>
+</html>
