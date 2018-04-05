@@ -5,7 +5,7 @@
 メル尺度のスぺクトログラムの作成、オートエンコーダによる事前学習、などの練習用。  
 ディープラーニングのフレームワークは Chainerを使用。 
 
-[github repository](https://github.com/shun60s/spectrum)  
+[github repository](https://github.com/shun60s/Spectrogram_Autoencoder)  
 
 ## 使い方
 ### 1.メル尺度のスペクトログラムの作成  
